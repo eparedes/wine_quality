@@ -24,11 +24,11 @@ Two datasets are used: `winequality-red.csv` and `winequality-white.csv`, both u
 - White wine data: 4,898 rows.
 - Both datasets have the same 11 features: `['fixed_acidity', 'volatile_acidity', 'citric_acid', 'residual_sugar', 'chlorides', 'free_sulfur_dioxide', 'total_sulfur_dioxide', 'density', 'pH', 'sulphates', 'alcohol']`, all of type float64.
 
-![Red Wine Info](images/red_wine_info.png)
-![White Wine Info](images/white_wine_info.png)
+<img src="images/red_wine_info.png" alt="Red wine info" width="250"/>
+<img src="images/white_wine_info.png" alt="White wine info" width="250"/>
 
 - Statistical summaries indicate potential outliers. Box plots were used to visualize data distribution.
-![Boxplot](images/boxplot.png)
+<img src="images/boxplot.png" alt="Red wine confusion matrix" width="250"/>
 
 ## Data Preparation
 ### Outlier Treatment
@@ -51,7 +51,7 @@ The project's success criterion is achieving 80% or better prediction accuracy. 
 ![Baseline Score](images/baseline_score.png)
 
 #### Red Wine Confusion Matrix:
-<img src="images/redw_confusion_matrix.png" alt="Red Wine Confusion Matrix" width="190"/>
+<img src="images/redw_confusion_matrix.png" alt="Red wine confusion matrix" width="250"/>
 
 #### White Wine Confusion Matrix:
-<img src="images/whitew_confusion_matrix.png" alt="White Wine Confusion Matrix" width="190"/>
+<img src="images/whitew_confusion_matrix.png" alt="White wine confusion matrix" width="250"/>
