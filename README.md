@@ -1,50 +1,57 @@
 # Wine Quality Prediction
 
 ## Business Understanding
-How does wine quality impact wine makers' operational costs?
+How does wine quality impact wine makers operational costs?
 Wine producers could benefit from knowing how a "wine expert" would rate the quality of their wines. Wine quality information could be used to:
 - Make wines in small batches and assess their quality before mass production
 - Reduce waste of raw materials
 - Decide whether a wine should be distribuited to specialized retail stores or to a general retail store
 - Determine the bottling process
 
-The ["Wine Quality"](https://archive.ics.uci.edu/dataset/186/wine+quality) published by UC Irvine was used for this analysis. Because red and white wine taste quite different, the wine data was collected separatly for each wine.
+The ["Wine Quality"](https://archive.ics.uci.edu/dataset/186/wine+quality) dataset from UC Irvine was used for this analysis. Since red and white wines have distinct characteristics, separate data was collected for each type.
 
-A risk of using this data to train machine learning models is that it pertains to Portuguese "Vinho Verde" wine, so learning may not generalize to wines form other regions in the world. One way to mitigate this is to search for more wine quality data that better represent different regions from around the world.
+**Note:** This dataset pertains to Portuguese "Vinho Verde" wine, which may limit the generalizability of the model to wines from other regions. To mitigate this, additional wine quality data from various regions should be considered.
 
 ## Data Mining Goal
-The goal for this project is to predict wine quality from physicochemical tests results. A successful outcome for this project is to create a model that achieves 85% accuracy or better in quality predictions.
+The objective of this project is to predict wine quality based on physicochemical test results. The target is to develop a model that achieves an accuracy of 85% or higher in quality predictions.
 
 ## Data Understanding
-There are two different data sets for each type of wine, `winequality-red.csv` and `winequality-white.csv`, and they use and use `;` as a delimiter. The files were loaded into two dataframes for exploration. For full exploratory data analysis (EDA), open the [wine notebook](wine.ipynb).
+Two datasets are used: `winequality-red.csv` and `winequality-white.csv`, both using `;` as a delimiter. These files were loaded into dataframes for exploration. For a detailed exploratory data analysis (EDA), refer to the [wine notebook](wine.ipynb).
 
-Here are some findings during EDA: 
-- Neither data file contain missing values. The red wine data has 1,599 rows while the white wine data has 4,898 rows. Both data sets have the same 10 features `['fixed_acidity', 'volatile_acidity', 'citric_acid', 'residual_sugar', 'chlorides', 'free_sulfur_dioxide', 'total_sulfur_dioxide', 'density', 'pH', 'sulphates', 'alcohol']`, all of type float64. Similarly. The target
+### Key Findings from EDA:
+- No missing values in either dataset.
+- Red wine data: 1,599 rows.
+- White wine data: 4,898 rows.
+- Both datasets have the same 11 features: `['fixed_acidity', 'volatile_acidity', 'citric_acid', 'residual_sugar', 'chlorides', 'free_sulfur_dioxide', 'total_sulfur_dioxide', 'density', 'pH', 'sulphates', 'alcohol']`, all of type float64.
 
-<img src="images/red_wine_info.png" alt="Red Wine Info" width="300"/>
-<img src="images/white_wine_info.png" alt="White Wine Info" width="300"/>
+![Red Wine Info](images/red_wine_info.png)
+![White Wine Info](images/white_wine_info.png)
 
-- The statistical summary shows that there might be outliers in the data. Box plots were used to visualize the data distribuition
-![alt text](images/boxplot.png). Outliers treatment can be further down the document. 
+- Statistical summaries indicate potential outliers. Box plots were used to visualize data distribution.
+![Boxplot](images/boxplot.png)
 
 ## Data Preparation
 ### Outlier Treatment
-- Two methods were used to treat outliers, KNN imputation and Winsorization
-- Winsorization yielded better predications than KNN imputation using a simple logistic regression model
+Two methods were used to treat outliers:
+- KNN imputation
+- Winsorization
+
+Winsorization yielded better predictions than KNN imputation using a simple logistic regression model.
 
 ### Feature Selection
+Feature selection techniques were applied to identify the most relevant features for modeling.
 
 ## Modeling
-Different classifiers were evaluated using a simple logistic regression model as baseline. The two datasets (red and white wine data) were split into train and test subsets.
+Various classifiers were evaluated, with a simple logistic regression model serving as the baseline. The datasets (red and white wine data) were split into training and testing subsets.
 
 ## Evaluation
-Since the success of the project goal is to achieve 80% or better in prediction accuracy, the baseline model was evaluated using confusion matrices.
+The project's success criterion is achieving 80% or better prediction accuracy. The baseline model was evaluated using confusion matrices.
 
-Here's the baseline model score:
-![alt text](images/baseline_score.png)
+### Baseline Model Score:
+![Baseline Score](images/baseline_score.png)
 
-<img src="images/redw_confusion_matrix.png" alt="Red Wine Info" width="190"/>
+#### Red Wine Confusion Matrix:
+<img src="images/redw_confusion_matrix.png" alt="Red Wine Confusion Matrix" width="190"/>
 
-<img src="images/whitew_confusion_matrix.png" alt="White Wine Info" width="190s"/>
-
-
+#### White Wine Confusion Matrix:
+<img src="images/whitew_confusion_matrix.png" alt="White Wine Confusion Matrix" width="190"/>
