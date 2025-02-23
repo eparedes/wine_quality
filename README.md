@@ -20,8 +20,8 @@ The two data files, `winequality-red.csv` and `winequality-white.csv`, use `;` a
 
 Neither data file contain missing values. The red wine data consists of 1,599 rows with 10 features, all of type float64. Similarly, the white wine data consists of 4,898 with 10 features, all of type float64.
 
-![alt text](images/red_wine_info.png)
-![alt text](images/white_wine_info.png)
+<img src="images/red_wine_info.png" alt="Red Wine Info" width="200"/>
+<img src="images/white_wine_info.png" alt="White Wine Info" width="200"/>
 
 
 ## Data Preparation
