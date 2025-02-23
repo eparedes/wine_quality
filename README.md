@@ -28,7 +28,7 @@ Two datasets are used: `winequality-red.csv` and `winequality-white.csv`, both u
 <img src="images/white_wine_info.png" alt="White wine info" width="250"/>
 
 - Statistical summaries indicate potential outliers. Box plots were used to visualize data distribution.
-<img src="images/boxplot.png" alt="Red wine confusion matrix" width="250"/>
+![boxplot](images/boxplot.png)
 
 ## Data Preparation
 ### Outlier Treatment
@@ -48,7 +48,7 @@ Various classifiers were evaluated, with a simple logistic regression model serv
 The project's success criterion is achieving 80% or better prediction accuracy. The baseline model was evaluated using confusion matrices.
 
 ### Baseline Model Score:
-![Baseline Score](images/baseline_score.png)
+<img src="images/baseline_score.png" alt="baseline" width="250"/>
 
 #### Red Wine Confusion Matrix:
 <img src="images/redw_confusion_matrix.png" alt="Red wine confusion matrix" width="250"/>
