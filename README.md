@@ -1,57 +1,122 @@
 # Wine Quality Prediction
 
-## Business Understanding
-How does wine quality impact wine makers operational costs?
-Wine producers could benefit from knowing how a "wine expert" would rate the quality of their wines. Wine quality information could be used to:
-- Make wines in small batches and assess their quality before mass production
-- Reduce waste of raw materials
-- Decide whether a wine should be distribuited to specialized retail stores or to a general retail store
-- Determine the bottling process
+## 1. Business Understanding
+### Problem Statement
+How does wine quality impact winemakers' operational costs?
 
-The ["Wine Quality"](https://archive.ics.uci.edu/dataset/186/wine+quality) dataset from UC Irvine was used for this analysis. Since red and white wines have distinct characteristics, separate data was collected for each type.
+Wine producers can benefit from predicting how a wine expert would rate their wines. Understanding wine quality can help producers:
+- Optimize production by assessing small batches before mass production.
+- Reduce waste of raw materials.
+- Determine whether a wine should be distributed to specialized retail stores or general retail stores.
+- Improve bottling and storage decisions to maintain quality.
 
-**Note:** This dataset pertains to Portuguese "Vinho Verde" wine, which may limit the generalizability of the model to wines from other regions. To mitigate this, additional wine quality data from various regions should be considered.
+This project uses the [Wine Quality dataset](https://archive.ics.uci.edu/dataset/186/wine+quality) from UC Irvine. Since red and white wines have distinct characteristics, separate data was collected for each type.
 
-## Data Mining Goal
-The objective of this project is to predict wine quality based on physicochemical test results. The target is to develop a model that achieves an accuracy of 85% or higher in quality predictions.
+**Note:** The dataset specifically pertains to Portuguese "Vinho Verde" wine, which may limit the generalizability of the model to wines from other regions. Additional wine quality data from various regions should be considered for broader applicability.
 
-## Data Understanding
-Two datasets are used: `winequality-red.csv` and `winequality-white.csv`, both using `;` as a delimiter. These files were loaded into dataframes for exploration. For a detailed exploratory data analysis (EDA), refer to the [wine notebook](wine.ipynb).
+## 2. Data Understanding
+### Dataset Overview
+The dataset consists of two separate files:
+- `winequality-red.csv`: Contains **1,599** samples of red wine.
+- `winequality-white.csv`: Contains **4,898** samples of white wine.
 
-### Key Findings from EDA:
+Both datasets have **11 physicochemical attributes** (all numerical, float64 type):
+- `fixed_acidity`, `volatile_acidity`, `citric_acid`, `residual_sugar`, `chlorides`, `free_sulfur_dioxide`, `total_sulfur_dioxide`, `density`, `pH`, `sulphates`, `alcohol`
+
+Each sample is labeled with a **quality score (0-10)** assigned by wine experts.
+
+#### Key Findings from Exploratory Data Analysis (EDA):
 - No missing values in either dataset.
-- Red wine data: 1,599 rows.
-- White wine data: 4,898 rows.
-- Both datasets have the same 11 features: `['fixed_acidity', 'volatile_acidity', 'citric_acid', 'residual_sugar', 'chlorides', 'free_sulfur_dioxide', 'total_sulfur_dioxide', 'density', 'pH', 'sulphates', 'alcohol']`, all of type float64.
+- The target variable (`quality`) is highly imbalanced.
+- Box plots suggest the presence of potential outliers.
 
-<img src="images/red_wine_info.png" alt="Red wine info" width="250"/>
-<img src="images/white_wine_info.png" alt="White wine info" width="250"/>
-
-- Statistical summaries indicate potential outliers. Box plots were used to visualize data distribution.
+**Boxplot Visualization:**
 ![boxplot](images/boxplot.png)
 
-## Data Preparation
+For detailed data exploration, refer to the [wine notebook](wine.ipynb).
+
+## 3. Data Preparation
 ### Outlier Treatment
-Two methods were used to treat outliers:
-- KNN imputation
-- Winsorization
+While boxplots indicate potential outliers, domain knowledge suggests that some extreme values in free sulfur dioxide and total sulfur dioxide may indicate anomalies in the winemaking process. These anomalies could affect wine quality.
 
-Winsorization yielded better predictions than KNN imputation using a simple logistic regression model.
+Thus, **no extensive outlier removal was performed**, except for removing **two extreme total sulfur dioxide values (>250) in the red wine dataset**, as these are considered true outliers:
+```python
+# Removing extreme total sulfur dioxide outliers
+df_red_raw = df_red_raw[df_red_raw['total_sulfur_dioxide'] < 250]
+```
 
-### Feature Selection
-Feature selection techniques were applied to identify the most relevant features for modeling.
+### Target Variable Transformation
+The `quality` variable has **10 possible classes (0-10)**, making classification challenging. To simplify modeling, the target variable was transformed into three categories:
+- **Low Quality (0-4)**
+- **Average Quality (5-6)**
+- **High Quality (7-10)**
 
-## Modeling
-Various classifiers were evaluated, with a simple logistic regression model serving as the baseline. The datasets (red and white wine data) were split into training and testing subsets.
+To address class imbalance, **SMOTE (Synthetic Minority Over-sampling Technique)** was applied to balance the dataset.
 
-## Evaluation
-The project's success criterion is achieving 80% or better prediction accuracy. The baseline model was evaluated using confusion matrices.
+## 4. Modeling
+Three classification models were evaluated:
+- **K-Nearest Neighbors (KNN)**
+- **Decision Trees**
+- **Support Vector Machines (SVM)**
 
-### Baseline Model Score:
-<img src="images/baseline_score.png" alt="baseline" width="250"/>
+Hyperparameter tuning was performed using `GridSearchCV` to optimize model performance.
 
-#### Red Wine Confusion Matrix:
-<img src="images/redw_confusion_matrix.png" alt="Red wine confusion matrix" width="250"/>
+### Best Model Parameters
+#### Red Wine:
+- **KNN:** `{'model__n_neighbors': 3, 'model__weights': 'distance'}`
+- **Decision Tree:** `{'model__max_depth': None, 'model__min_samples_split': 2}`
+- **SVM:** `{'model__C': 10, 'model__kernel': 'rbf'}`
 
-#### White Wine Confusion Matrix:
-<img src="images/whitew_confusion_matrix.png" alt="White wine confusion matrix" width="250"/>
+#### White Wine:
+- **KNN:** `{'model__n_neighbors': 3, 'model__weights': 'distance'}`
+- **Decision Tree:** `{'model__max_depth': 20, 'model__min_samples_split': 2}`
+- **SVM:** `{'model__C': 10, 'model__kernel': 'rbf'}`
+
+## 5. Evaluation
+### Model Performance
+Models were assessed using **accuracy** as the primary metric.
+
+#### Baseline model:
+Linear Regression
+![alt text](/images/baseline_accuracy.png)
+
+#### Red Wine Results:
+| Model                  | Train Accuracy | Test Accuracy |
+|------------------------|---------------|--------------|
+| Logistic Regression    | 85%           | 83%          |
+| K-Nearest Neighbors    | 92%           | 89%          |
+| Decision Tree          | 100%          | 87%          |
+| Support Vector Machine | 91%           | **91%**      |
+
+#### White Wine Results:
+| Model                  | Train Accuracy | Test Accuracy |
+|------------------------|---------------|--------------|
+| Logistic Regression    | 84%           | 82%          |
+| K-Nearest Neighbors    | 91%           | **89%**      |
+| Decision Tree          | 100%          | 86%          |
+| Support Vector Machine | 90%           | 89%          |
+
+**Best Performing Models:**
+- **Red Wine:** Support Vector Machine (**91% accuracy**)
+- **White Wine:** K-Nearest Neighbors (**89% accuracy**)
+
+### Confusion Matrices
+#### Red Wine (SVM):
+![Red Wine Confusion Matrix](/images/red_wine_confusion_matrix.png)
+
+#### White Wine (KNN):
+![White Wine Confusion Matrix](images/white_wine_confusion_matrix.png)
+
+## 6. Deployment and Next Steps
+### Deployment Plan
+- Deploy the **Support Vector Machine (Red Wine)** and **K-Nearest Neighbors (White Wine)** models to a production environment.
+- Provide an API for real-time wine quality predictions.
+
+### Monitoring and Maintenance
+- Implement logging and monitoring to track model performance over time.
+- Periodically retrain models with new data to maintain accuracy.
+
+### Future Enhancements
+- **Feature Engineering:** Explore additional features to improve predictive performance.
+- **Ensemble Methods:** Experiment with Random Forests, XGBoost, or Neural Networks.
+- **Wider Dataset:** Incorporate wine quality data from different regions to enhance model generalizability.
