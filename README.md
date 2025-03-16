@@ -78,6 +78,7 @@ Models were assessed using **accuracy** as the primary metric.
 
 #### Baseline model:
 Linear Regression
+
 ![alt text](/images/baseline_accuracy.png)
 
 #### Red Wine Results:
